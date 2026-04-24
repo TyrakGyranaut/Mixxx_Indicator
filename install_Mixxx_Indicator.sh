@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Mixxx_Indicator Installer
+# Mixxx_Indicator Installer V2.1
 # Created by the Linux Queen :)
 
 echo "--- Mixxx_Indicator Installation Assistant ---"
@@ -22,54 +22,67 @@ import os
 
 def is_mixxx_running():
     try:
-        # Check if the process 'mixxx' exists
         subprocess.check_output(["pgrep", "-x", "mixxx"])
         return True
     except:
         return False
 
-def check_mixxx_stream():
+def get_stream_status():
     try:
-        # Check if Mixxx has any active (ESTABLISHED) network connection
-        result = subprocess.run("ss -tpn | grep -i 'mixxx' | grep -i 'ESTAB'", shell=True, capture_output=True)
-        return True if result.returncode == 0 else False
+        # Wir schauen uns die Verbindung an
+        result = subprocess.run("ss -tpn | grep -i 'mixxx' | grep -i 'ESTAB'", shell=True, capture_output=True, text=True)
+        
+        # Wenn Mixxx gar keine Verbindung mehr zum Server hat -> SOFORT ROT
+        if result.returncode != 0 or not result.stdout.strip():
+            return "OFFLINE"
+
+        lines = result.stdout.strip().split('\n')
+        for line in lines:
+            parts = line.split()
+            # Wir prüfen die Send-Queue (3. Spalte)
+            try:
+                send_q = int(parts[2]) 
+                # Wenn mehr als 10.000 Bytes feststecken, ist die Leitung verstopft
+                if send_q > 10000:
+                    return "STALLED" # Purple
+            except:
+                continue
+        
+        return "ONLINE" # Green
     except:
-        return False
+        return "OFFLINE"
 
 class MixxxIndicator:
     def __init__(self, root):
         self.root = root
-        self.root.title("Mixxx Indicator")
+        self.root.title("Mixxx Indicator 2.0")
         self.size = 85
-        # Set window size and floating position
         self.root.geometry(f"{self.size}x{self.size}+150+150")
         self.root.attributes("-topmost", True)
         
         self.canvas = tk.Canvas(root, width=self.size, height=self.size, bg='black', highlightthickness=0)
         self.canvas.pack(expand=True, fill="both")
         
-        # Draw the status circle
         self.circle = self.canvas.create_oval(10, 10, self.size-10, self.size-10, fill="red", outline="white", width=3)
         
-        # Start Mixxx if it is not already running
         if not is_mixxx_running():
             subprocess.Popen(["mixxx"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
         self.update_loop()
 
     def update_loop(self):
-        # Self-destruct if Mixxx is closed
         if not is_mixxx_running():
             self.root.destroy()
             return
             
-        # Update color based on stream status
-        if check_mixxx_stream():
-            color = "#00FF00" # Green
-            bg_color = "#002200" # Dark Green
+        status = get_stream_status()
+        
+        if status == "ONLINE":
+            color, bg_color = "#00FF00", "#002200" # Green
+        elif status == "STALLED":
+            color, bg_color = "#FF00FF", "#220022" # Purple/Magenta
         else:
-            color = "#FF0000" # Red
-            bg_color = "#220000" # Dark Red
+            color, bg_color = "#FF0000", "#220000" # Red
             
         self.canvas.itemconfig(self.circle, fill=color)
         self.canvas.config(bg=bg_color)
