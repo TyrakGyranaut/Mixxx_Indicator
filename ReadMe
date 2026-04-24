@@ -6,8 +6,11 @@ What it does
     Automatic Startup: Launches Mixxx automatically if it's not already running.
     Smart Instance Control: Prevents multiple instances of Mixxx from opening.
     Live Status Monitoring:
-        🔴 RED: Mixxx is open, but you are not streaming (or the connection dropped).
-        🟢 GREEN: You are actively connected and streaming to a server.
+        ## What it does (Color Codes)
+- 🔴 **RED:** Offline. Mixxx is open, but no active stream connection was found.
+- 🟢 **GREEN:** Online. You are streaming, and data is flowing smoothly.
+- 🟣 **PURPLE:** Stalled. The connection is still there, but data is "stuck" (Internet lag or Server issues). Better check your router!
+
     Auto-Cleanup: The indicator automatically closes when you exit Mixxx.
     Always on Top: Stays visible even when you are focused on other windows (like Second Life viewers, Firestorm, etc.).
 
