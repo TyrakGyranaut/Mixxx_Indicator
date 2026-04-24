@@ -1,0 +1,36 @@
+Mixxx_Indicator 🐧🎧
+The "On-Air" visual assistant for Mixxx DJs on Linux.
+Developed because "impossible" is just a challenge, not an answer. This tool provides a floating, always-on-top visual indicator that changes color based on your actual streaming status.
+What it does
+
+    Automatic Startup: Launches Mixxx automatically if it's not already running.
+    Smart Instance Control: Prevents multiple instances of Mixxx from opening.
+    Live Status Monitoring:
+        🔴 RED: Mixxx is open, but you are not streaming (or the connection dropped).
+        🟢 GREEN: You are actively connected and streaming to a server.
+    Auto-Cleanup: The indicator automatically closes when you exit Mixxx.
+    Always on Top: Stays visible even when you are focused on other windows (like Second Life viewers, Firestorm, etc.).
+
+System Requirements
+
+    OS: Linux (Tested on Mint Cinnamon, should work on any Debian-based distro).
+    Software: Mixxx (obviously!).
+    Dependencies: Python3, python3-tk (for graphics), and iproute2 (for network checking).
+    Note: The installer handles these for you!
+
+Installation
+The easiest way to get the Mixxx_Indicator is to use the provided installer script:
+
+    Download the install_mixxx_indicator.sh script.
+    Right-click the file and select Properties.
+    Go to the Permissions tab and check "Allow executing file as program".
+    Double-click the script and select "Run in Terminal" (or run ./install_mixxx_indicator.sh from your terminal).
+    Enter your password when prompted to install the necessary libraries.
+
+A shortcut named "Mixxx Indicator" will appear on your desktop.
+How to use
+Just double-click the Mixxx Indicator on your desktop. It will start Mixxx and the status light. You can drag the circle anywhere on your screen.
+Support the Developer
+If this tool saved your DJ set or just made your Linux life easier, feel free to send a "Thank You" or a virtual coffee!
+
+Created with passion by the "Linux Queen" :).
